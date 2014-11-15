@@ -27,6 +27,7 @@ class HueController
     $.ajax param
 
   getLights: () ->
+    # TODO: jsonからライトの数だけ取り出してreturn
     dfd = $.Deferred()
     uri = '/' + @user + 'lights'
     method = 'GET'
@@ -39,6 +40,7 @@ class HueController
         return dfd.reject()
 
   lightTrriger: (light, trigger) ->
+    # TODO: jsonから成功か否かを判別してbooleanでreturn
     uri = '/' + @user + '/lights/' + light.toString() + '/state'
     method = 'PUT'
     data =
@@ -52,6 +54,7 @@ class HueController
         return dfd.promise()
 
   changeBri: (light, bri) ->
+    # TODO: jsonから成功か否かを取り出してbooleanでreturn
     uri = '/' + @user + '/lights/' + light.toString() + '/state'
     method = 'PUT'
     data =
@@ -65,6 +68,7 @@ class HueController
         return dfd.promise()
 
   effectTrriget: (light, trigger) ->
+    # TODO: jsonから成功か否かを取り出してbooleanでreturn
     uri = '/' + @user + '/lights/' + light.toString() + '/state'
     method = 'PUT'
     data =

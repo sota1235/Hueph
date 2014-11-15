@@ -16,10 +16,10 @@ class HueController
       url    : @url + uri
       type   : method
       success: (msg) ->
-        dfd.resolve msg
+        dfd.resolve $.parseJSON msg
         return dfd.promise()
       error  : (err) ->
-        dfd.reject err
+        dfd.reject $.parseJSON err
         return dfd.promise()
     # add data to param if 'POST' or 'PUT'
     if method != 'GET'

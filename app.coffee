@@ -16,4 +16,8 @@ app.use coffeeMid
 app.get '/', (req, res) ->
   res.render 'index'
 
+# for debug the client js
+app.get '/test', (req, res) ->
+  res.render 'test'
+
 app.listen app.get 'port'

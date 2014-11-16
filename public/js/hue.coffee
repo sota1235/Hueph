@@ -8,7 +8,7 @@ class HueController
   constructor: (ip, user) ->
     @ip   = ip
     @user = user
-    @url  = "http://" + ip + "/api"
+    @url  = "http://" + ip + "/api/"
 
   request = (uri, method, data) ->
     dfd = $.Deferred()
@@ -19,63 +19,69 @@ class HueController
         dfd.resolve $.parseJSON msg
         return dfd.promise()
       error  : (err) ->
-        dfd.reject $.parseJSON err
+        dfd.reject error
         return dfd.promise()
     # add data to param if 'POST' or 'PUT'
     if method != 'GET'
       param['data'] = data
     $.ajax param
 
+  # 成功したらライトの数をreturn, ダメだったらfalse
   getLights: () ->
-    # TODO: jsonからライトの数だけ取り出してreturn
     dfd = $.Deferred()
-    uri = '/' + @user + 'lights'
+    uri = @user + '/lights'
     method = 'GET'
     request.call this, uri, method, null
       .then (result) ->
-        dfd.resolve result
+        if result.length == 1
+          dfd.resolve false
+        else
+          dfd.resolve result.length
         return dfd.promise()
       .fail (err) ->
         dfd.reject err
         return dfd.reject()
 
+  # リクエストのtrue or falseをreturn
   lightTrriger: (light, trigger) ->
-    # TODO: jsonから成功か否かを判別してbooleanでreturn
     uri = '/' + @user + '/lights/' + light.toString() + '/state'
     method = 'PUT'
     data =
-      'on': if trigger then true else false
+      'on': trigger
     request.call this, uri, method, data
       .then (result) ->
-        dfd.resolve result
+        res = result[0]["error"] == undefined
+        dfd.resolve res
         return dfd.promise()
       .fail (err) ->
         dfd.reject err
         return dfd.promise()
 
+  # リクエストのtrue or falseをreturn
   changeBri: (light, bri) ->
-    # TODO: jsonから成功か否かを取り出してbooleanでreturn
     uri = '/' + @user + '/lights/' + light.toString() + '/state'
     method = 'PUT'
     data =
       'bri': bri
     request.call this, uri, method, data
       .then (result) ->
-        dfd.resolve result
+        res = result[0]["error"] == undefined
+        dfd.resolve res
         return dfd.promise()
       .fail (err) ->
         dfd.reject err
         return dfd.promise()
 
+  # リクエストのtrue or falseをreturn
   effectTrriget: (light, trigger) ->
-    # TODO: jsonから成功か否かを取り出してbooleanでreturn
     uri = '/' + @user + '/lights/' + light.toString() + '/state'
     method = 'PUT'
     data =
       'effect': if trigger then 'colorloop' else 'none'
     request.call this, uri, method, data
       .then (result) ->
-        dfd.resolve result
+        res = result[0]["error"] == undefined
+        dfd.resolve res
         return dfd.promise()
       .fail (err) ->
         dfd.reject err

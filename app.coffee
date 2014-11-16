@@ -12,6 +12,9 @@ app.use express.static path.resolve 'public/'
 app.get '/', (req, res) ->
   res.render 'index'
 
+app.get '/hueph_volume', (req, res) ->
+  res.render 'hueph_volume'
+
 # for debug the client js
 app.get '/test', (req, res) ->
   res.render 'test'

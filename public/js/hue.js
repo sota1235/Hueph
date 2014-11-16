@@ -14,7 +14,7 @@ var HueController = function(ip, user) {
         return dfd.promise();
       },
       error: function(err) {
-        dfd.reject(error);
+        dfd.reject(err);
         return dfd.promise();
       }
     };

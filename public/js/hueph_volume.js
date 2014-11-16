@@ -42,8 +42,9 @@ stopSound = function(source) {
 }
 
 /* for Hue */
-ip   = null;
+ip   = "192.168.1.100";
 user = "newdeveloper";
+hue  = new HueController(ip, user);
 /* for WebAudioAPI */
 context  = null;
 source   = null;
@@ -55,13 +56,13 @@ mode     = 0;
 
 getFreq = function() {
   data = new Uint8Array(256);
-  console.log('hello');
   if(mode===1) analyser.getByteFrequencyData(data);
   var sum = 0;
   for(var i=0;i<256;i++) {
     sum += data[i];
   }
   console.log(sum/256);
+  hue.changeBri(1, sum/256);
 }
 
 window.onload = function() {
@@ -94,4 +95,4 @@ $(function() {
   });
 });
 
-setInterval(getFreq, 100);
+setInterval(getFreq, 1000);

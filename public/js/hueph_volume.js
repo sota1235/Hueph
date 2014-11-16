@@ -61,8 +61,13 @@ getFreq = function() {
   for(var i=0;i<256;i++) {
     sum += data[i];
   }
-  console.log(sum/256);
-  hue.changeBri(1, sum/256);
+  hue.changeBri(1, parseInt(sum/256))
+    .then(function(result) {
+      console.log('OK: ' + parseInt(sum/256).toString());
+    })
+    .fail(function(error) {
+      console.error(error);
+    });
 }
 
 window.onload = function() {
@@ -95,4 +100,4 @@ $(function() {
   });
 });
 
-setInterval(getFreq, 1000);
+setInterval(getFreq, 300);

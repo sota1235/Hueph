@@ -1,7 +1,29 @@
+/*
+ * Hue Controller
+ *
+ * Description:
+ *   Hueをclient jsから制御する
+ *
+ * Methods:
+ *   getLights():
+ *     lightの数を取得
+ *   lightTrriger(light, trigger):
+ *     指定のlightをon/off
+ *   changeBri(light, bri):
+ *     指定のlightのbrightnessを変更
+ *   effectTrriger(light, trigger):
+ *     指定のlightのeffectをon/off
+ *   changeColor(light, [r, g, b]):
+ *     指定のlightの色をrgbにしたがって変更
+ * Author:
+ *   sota1235
+ */
+
 var HueController = function(ip, user) {
   this.ip = ip;
   this.user = user;
   this.url = "http://" + ip + "/api/";
+  this.clcv = new colorConvert;
 
   this.request = function(uri, method, data) {
     var dfd, param;
@@ -94,6 +116,27 @@ var HueController = function(ip, user) {
     return this.request.call(this, uri, method, data).then(function(result) {
       var res;
       res = result[0]["error"] === void 0;
+      dfd.resolve(res);
+      return dfd.promise();
+    }).fail(function(err) {
+      dfd.reject(err);
+      return dfd.promise();
+    });
+  };
+
+  HueController.prototype.changeColor = function(light, color) {
+    var dfd, data, method, uri;
+    dfd = $.Deferred();
+    uri = this.user + '/lights/' + light.toString() + '/state';
+    method = 'PUT';
+    h = this.clcv.rgb(color).hsv()[0];
+    data = {
+        "colormode": "hs",
+        "hue"      : h
+    };
+    data = JSON.stringify(data);
+    return this.request.call(this, uri, method, data).then(function(result) {
+      var res = result[0]["error"] === void 0;
       dfd.resolve(res);
       return dfd.promise();
     }).fail(function(err) {

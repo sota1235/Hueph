@@ -15,8 +15,8 @@ app.get '/', (req, res) ->
 app.get '/hueph_volume', (req, res) ->
   res.render 'hueph_volume'
 
-app.get '/hueph_rhythm', (req, res) ->
-  res.render 'hueph_rhythm'
+app.get '/hueph_kick', (req, res) ->
+  res.render 'hueph_kick'
 
 # for debug the client js
 app.get '/test', (req, res) ->
